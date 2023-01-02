@@ -7,7 +7,6 @@ const request = require('request');
 const {execFile} = require('child_process');
 const ytdl = require('ytdl-core');
 const path = require('path');
-const fetch = require('node-fetch');
 const fs = require('fs');
 (async () => {
   const fetch = await import('node-fetch');
