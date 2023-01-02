@@ -9,7 +9,12 @@ const ytdl = require('ytdl-core');
 const path = require('path');
 const fetch = require('node-fetch');
 const fs = require('fs');
-const keynya = "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"  //Input your OpenAI api-Key -> https://beta.openai.com/account/api-keys
+(async () => {
+  const fetch = await import('node-fetch');
+  // use fetch here
+})();
+
+const keynya = "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"  //Input your OpenAI api-Key -> https://beta.openai.com/account/api-keys
 const configuration = new Configuration({
   apiKey: keynya,
 });
@@ -281,7 +286,7 @@ client.on('message', async (message) => {
         let contact = await message.getContact();
         await client.sendSeen(from) 
         if (isCmd) {
-            let apiKey = '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';
+            let apiKey = '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';
             const headers = {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${apiKey}`,
@@ -305,8 +310,7 @@ client.on('message', async (message) => {
         console.log(err)
     }
 });
-
-
+//-------------------------------------------imagetest---------------------------
 
 
 //-------------------------------------------------------------------------------
