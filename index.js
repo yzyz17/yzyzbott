@@ -7,13 +7,11 @@ const request = require('request');
 const {execFile} = require('child_process');
 const ytdl = require('ytdl-core');
 const path = require('path');
+const fetch = require('node-fetch');
 const fs = require('fs');
-(async () => {
-  const fetch = await import('node-fetch');
-  // use fetch here
-})();
 
-const keynya = "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"  //Input your OpenAI api-Key -> https://beta.openai.com/account/api-keys
+
+const keynya = "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"  //Input your OpenAI api-Key -> https://beta.openai.com/account/api-keys
 const configuration = new Configuration({
   apiKey: keynya,
 });
@@ -191,6 +189,13 @@ try{
     
         fs.writeFileSync('names.json', JSON.stringify(names));
       }
+      let kth = fs.readFileSync('./kth.txt', 'utf8');
+      console.log(kth);
+      let kth1 = parseInt(kth, 10);
+      let kth2 = kth1 / names.length;
+      let kth3 = Math.ceil(kth2);
+
+
       let nms = [];
 
       let n = 1;
@@ -200,7 +205,7 @@ try{
          n++;
       }
  
-      let tmren = ` ${info} \n -------------\n${nms} \n --------------\n للتسجيل ارسلي بالخاص كلمة سجل ثم اسمك \n \n  مثال: سجل يزيد`;
+      let tmren = ` ${info}\n القطة : ${kth3} \n -------------\n${nms} \n --------------\n للتسجيل ارسلي بالخاص كلمة سجل ثم اسمك \n \n  مثال: سجل يزيد`;
 
       let GRB = `966551581988-1520100562@g.us`;
       client.sendMessage(GRB , tmren);
@@ -238,7 +243,12 @@ client.on('message', async (message) => {
        nms.push('\n'+n+' - '+i)
        n++;
     }
-    let tmren = ` ${info} \n -------------\n${nms} \n --------------\n للتسجيل ارسلي بالخاص كلمة سجل ثم اسمك \n \n  مثال: سجل يزيد`;
+    let kth = fs.readFileSync('./kth.txt', 'utf8');
+    let kth1 = parseInt(kth, 10);
+    let kth2 = kth1 / names.length;
+    let kth3 = Math.ceil(kth2);
+
+    let tmren = ` ${info}\n القطة : ${kth3} \n -------------\n${nms} \n --------------\n للتسجيل ارسلي بالخاص كلمة سجل ثم اسمك \n \n  مثال: سجل يزيد`;
 
     let GRB = `966551581988-1520100562@g.us`;
     client.sendMessage(GRB , tmren);
@@ -248,6 +258,13 @@ client.on('message', async (message) => {
     let tmrn = message.body.slice(4)
     fs.writeFileSync('names.json', '[]');
     fs.writeFile('./info.txt', tmrn, (error) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log('The file has been updated');
+      }
+    });
+    fs.writeFile('./kth.txt', '', (error) => {
       if (error) {
         console.error(error);
       } else {
@@ -264,7 +281,43 @@ client.on('message', async (message) => {
       client.sendMessage(GRB , tmren);
 
     }, 1500);
-  }}
+  } else if(message.body.startsWith('عدل')){
+    let tmrn = message.body.slice(4)
+    fs.writeFile('./info.txt', tmrn, (error) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log('The file has been updated');
+      }
+    });
+    let kth = fs.readFileSync('./kth.txt', 'utf8');
+    let kth1 = parseInt(kth, 10);
+    let kth2 = kth1 / names.length;
+    let kth3 = Math.ceil(kth2);
+    
+
+    setTimeout(() => {
+      let info = fs.readFileSync('./info.txt', 'utf8');
+      let tmren = ` ${info}\n القطة : ${kth3} \n -------------\n${nms} \n --------------\n للتسجيل ارسلي بالخاص كلمة سجل ثم اسمك \n \n  مثال: سجل يزيد`;
+
+      let GRB = `966551581988-1520100562@g.us`;
+      client.sendMessage(GRB , tmren);
+
+    }, 1500);
+  }else if(message.body.startsWith('احسب')){
+    let tmrn = message.body.slice(5);
+    fs.writeFile('./kth.txt', tmrn, (error) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log('The file has been updated');
+      }
+    });
+
+    client.sendMessage(message.from , ' تم اضافة الحسبة سيتم حساب القطة مع كل تسجيل جديد');
+
+  }
+}
   }
 });
 
@@ -285,7 +338,7 @@ client.on('message', async (message) => {
         let contact = await message.getContact();
         await client.sendSeen(from) 
         if (isCmd) {
-            let apiKey = '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';
+            let apiKey = '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';
             const headers = {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${apiKey}`,
